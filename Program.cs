@@ -1,8 +1,11 @@
+using FluentValidation.AspNetCore;
 using JobarCharityInitProject.Infrastructure.Integrations.Data;
 using JobarCharityInitProject.Infrastructure.Integrations.Data.Services.EfService;
 using JobarCharityInitProject.Services.ToDoService;
 using Microsoft.EntityFrameworkCore;
 using Repository_pattern_API.Infrastructure.Integrations.Data.Services.EfService;
+using Repository_pattern_API.Services.AdressService;
+using System.Reflection;
 
 namespace JobarCharityInitProject;
 
@@ -22,6 +25,13 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         builder.Services.AddTransient<IToDoService, ToDoService>();
+        builder.Services.AddTransient<IAddressService, AddressService>();
+
+        builder.Services.AddControllers()
+            .AddFluentValidation(v =>
+            {
+                v.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            });
 
         var app = builder.Build();
 
